@@ -13,7 +13,7 @@ if __name__=="__main__":
     parser.add_argument("--learnable_property", type=str, help='learnable property.', choices=["object", "nudity"])
     parser.add_argument("--erasure_methods", type=str, help='erasure methods.', default="None", choices=["NegPrompt", "SAFREE", "T2VUnlearning"])
     parser.add_argument("--esd_checkpoint", type=str, help='esd checkpoint.', default="./T2VUnlearning/weights/cogvideox2b_nudity_erasure")
-    parser.add_argument("--train_data_dir", type=str, help='train data dir.', default="/root/train_data/cogvideo2bX/objects/cassette_player")
+    parser.add_argument("--train_data_dir", type=str, help='train data dir.', default="./train_data/cogvideo2bX/objects/cassette_player")
     parser.add_argument("--output_dir", type=str, help='output dir.', default="./probe/cog2bX-objects_neg/")
     parser.add_argument("--neg_prompt", type=str, help='negative prompt for the concept.', required=True)
     parser.add_argument("--train_steps", type=int, help='train steps.', default=3000)

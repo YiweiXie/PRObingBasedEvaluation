@@ -130,21 +130,21 @@ if __name__ == '__main__':
     base_path = Path(args.base_path)
 
     file_map_np = {
-        'Origin': base_path / 'cogx2b_top5_tench_origin.csv',
-        'NegPrompt': base_path / 'tench_negprompt.csv', 
-        'PROBE': base_path / 'tench_negprompt_CI.csv',
+        'Origin': base_path / 'origin.csv',
+        'NegPrompt': base_path / 'negprompt.csv', 
+        'PROBE': base_path / 'negprompt_probe.csv',
     }
 
     file_map_safree = {
-        'Origin': base_path / 'cogx2b_top5_tench_origin.csv',
-        'SAFREE': base_path / 'tench_safree.csv',
-        'PROBE': base_path / 'tench_safree_CI.csv'
+        'Origin': base_path / 'origin.csv',
+        'SAFREE': base_path / 'safree.csv',
+        'PROBE': base_path / 'safree_probe.csv'
     }
 
     file_map_t2v = {
-        'Origin': base_path / 'cogx2b_top5_tench_origin.csv',
-        'T2VUnlearning': base_path / 'tench_T2VUnlearning.csv',
-        'PROBE': base_path / 'tench_T2VUnlearning_CI.csv'
+        'Origin': base_path / 'origin.csv',
+        'T2VUnlearning': base_path / 'T2VUnlearning.csv',
+        'PROBE': base_path / 'T2VUnlearning_probe.csv'
     }
 
     style_mapping = {

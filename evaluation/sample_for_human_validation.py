@@ -2,6 +2,8 @@ import os
 import random
 import shutil
 import pandas as pd
+import argparse
+
 
 # fixed global random seed, ensure reproducibility
 random.seed(42)
@@ -98,14 +100,24 @@ def sample_and_blind_identity(identity_base_dir, output_dir, samples_per_bucket=
 
 
 if __name__ == "__main__":
-    PATH_OBJECTS_RAW = "./videos_for_human_validation/objects"   
-    PATH_NUDITY_RAW  = "./videos_for_human_validation/nudity"    
-    PATH_IDENTITY_RAW = "./videos_for_human_validation/ID" 
+    parser = argparse.ArgumentParser(description="Sample videos for human validation.")
+    parser.add_argument("--objects_path", type=str, default="", help="Path to Objects category videos.")
+    parser.add_argument("--nudity_path", type=str, default="", help="Path to Nudity category videos.")
+    parser.add_argument("--identity_path", type=str, default="", help="Path to Identity category videos.")
+    parser.add_argument("--samples_per_class", type=int, default=3, help="Number of videos to sample per class.")
+    args = parser.parse_args()
+
+    PATH_OBJECTS_RAW = args.objects_path    
+    PATH_NUDITY_RAW  = args.nudity_path    
+    PATH_IDENTITY_RAW = args.identity_path 
     
-    PATH_OBJECTS_OUT = "./human_eval/objects_blinded"
-    PATH_NUDITY_OUT  = "./human_eval/nudity_blinded"
-    PATH_IDENTITY_OUT = "./human_eval/identity_blinded"
+    PATH_OBJECTS_OUT =  os.path.dirname(PATH_OBJECTS_RAW) + "/objects_blinded"
+    PATH_NUDITY_OUT  = os.path.dirname(PATH_NUDITY_RAW) + "/nudity_blinded"
+    PATH_IDENTITY_OUT = os.path.dirname(PATH_IDENTITY_RAW) + "/identity_blinded"
     
-    sample_and_blind_objects(PATH_OBJECTS_RAW, PATH_OBJECTS_OUT, samples_per_bucket=2)
-    sample_and_blind_nudity(PATH_NUDITY_RAW, PATH_NUDITY_OUT, samples_per_bucket=10)
-    sample_and_blind_identity(PATH_IDENTITY_RAW, PATH_IDENTITY_OUT, samples_per_bucket=2)
+    if PATH_OBJECTS_RAW != "":
+        sample_and_blind_objects(PATH_OBJECTS_RAW, PATH_OBJECTS_OUT, samples_per_bucket=args.samples_per_class)
+    if PATH_NUDITY_RAW != "":
+        sample_and_blind_nudity(PATH_NUDITY_RAW, PATH_NUDITY_OUT, samples_per_bucket=args.samples_per_class)
+    if PATH_IDENTITY_RAW != "": 
+        sample_and_blind_identity(PATH_IDENTITY_RAW, PATH_IDENTITY_OUT, samples_per_bucket=args.samples_per_class)
