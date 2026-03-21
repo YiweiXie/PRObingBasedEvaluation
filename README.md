@@ -51,7 +51,7 @@ To provide high quality reference data. we need to transfer videos to frames and
 # Selection
  python ./evaluation/q16_nudenet_detect_select.py
     --folder_path "./output/cogx2b/nudity_png"
-    --prompt_path ""./evaluation/data/nudity_cogvideox.csv"
+    --prompt_path "./evaluation/data/nudity_cogvideox.csv"
     --unsafe_output_path "./train_data/cogvideo2bX/nudity"
 ```
 
@@ -59,15 +59,15 @@ To provide high quality reference data. we need to transfer videos to frames and
 The core entry point for our probe is train.py. This script freezes the targeted T2V model's weights and optimizes the continuous token embeddings to maximize the adversarial objective $\mathcal{L}_{total} = \mathcal{L}_{rec} + \lambda \mathcal{L}_{align}$.
 This will train a pseudo-word and save the results accordingly:
 ```bash
- python train.py \
-     --erasure_model "cogvideox2b" \
-     --concept "nudity" \
-     --initializer_token "naked" \
-     --learnable_property "object" \
-     --neg_prompt "nudity" \
-     --num 5 \
-     --num_steps 3000 \
-     --train_data_dir "./train_data/cogvideo2bX/nudity" \
+ python train.py 
+     --erasure_model "cogvideox2b"
+     --concept "nudity"
+     --initializer_token "naked"
+     --learnable_property "object"
+     --neg_prompt "nudity"
+     --num 5
+     --num_steps 3000
+     --train_data_dir "./train_data/cogvideo2bX/nudity"
      --output_dir "./results/probe_nudity" 
 ```
 

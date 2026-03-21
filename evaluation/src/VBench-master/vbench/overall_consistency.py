@@ -46,47 +46,19 @@ def overall_consistency(clip_model, video_dict, tokenizer, device, sample="middl
     sim = []
     video_results = []
     image_transform = clip_transform(224)
-    ### 引入text描述
-    import pandas as pd
-    csv_path = "/root/experiment/T2VUnlearning/evaluation/data/nudity_cogvideox.csv"  # 包含 prompt 和 seed 的 CSV 文件
-
-    # csv_path = "/root/experiment/T2VUnlearning/evaluation/data/objects_vv/cassette_player.csv"
-    # # csv_path = "/root/experiment/T2VUnlearning/evaluation/data/objects_vv/springer_dog.csv"
-    # # csv_path = "/root/experiment/T2VUnlearning/evaluation/data/objects_vv/tench.csv"
-
-    # csv_path = "/root/T2V_Defense/SAE_for_T2V/prompt/big_artist_prompts.csv"
-    df = pd.read_csv(csv_path, encoding="latin-1")
     for info in tqdm(video_dict, disable=get_rank() > 0):
         query = info['prompt']
         print(query)
 
-        # prompt = df.iloc[int(query)]['prompt']
-        prompt = "A video of Donald Trump"
-        ##### ===== 这里做关键词替换
-        # 1. 定义目标艺术家列表
-        # target_artists = ['Van Gogh', 'Rembrandt', 'Picasso', 'Andy Warhol', 'Caravaggio', "Warhol"]
-        # 2. 构建正则模式
-        # re.escape: 确保名字里的特殊符号安全
-        # join('|'): 将名字用 "或" 连接，变成 (Van Gogh|Rembrandt|...)
-        # pattern = re.compile('|'.join(map(re.escape, target_artists)), re.IGNORECASE)
-        # 3. 执行替换
-        # 将匹配到的名字替换为 "artist" (或者 "an artist" 以获得更好的语法)
-        # prompt = pattern.sub('an artist', prompt)
-        print(prompt)
-
-        # prompt = "a video in the style of Pablo Picasso"
-
+        prompt = query
         video_list = info['video_list']
-        print(video_list)
-        
         for video_path in video_list:
             with torch.no_grad():
                 images = read_frames_decord_by_fps(video_path, num_frames=8, sample=sample)
                 images = image_transform(images)
                 images = images.to(device)
                 clip_feat = get_vid_features(clip_model,images.unsqueeze(0))
-                # text_feat = get_text_features(clip_model, query, tokenizer)
-                text_feat = get_text_features(clip_model, prompt, tokenizer)
+                text_feat = get_text_features(clip_model, query, tokenizer)
                 logit_per_text =  clip_feat @ text_feat.T
                 score_per_video =  float(logit_per_text[0][0].cpu())
                 sim.append(score_per_video)
